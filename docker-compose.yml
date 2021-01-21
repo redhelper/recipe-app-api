@@ -1,0 +1,15 @@
+version: "3"
+
+services: 
+  recipe_app:
+    build:
+      # use current folder as context
+      context: .
+    ports:
+      - "800:8000"
+    volumes:
+      # update these folders once changed:
+      - ./recipe_app:/recipe_app
+    # shell -runcommand "..."
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
