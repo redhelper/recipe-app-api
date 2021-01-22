@@ -11,19 +11,18 @@ services:
       # update these folders once changed:
       - ./recipe_app:/recipe_app
     # shell -runcommand "..."
-    command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
     environment:
-      - DB_HOST=db
-      - DB_NAME=recipe_app
-      - DB_USER=gramsay
-      - DB_PASS=thiscodeisfuckinraw
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
     depends_on:
       - db
   db:
     image: postgres:10-alpine
     environment:
-      - DB_HOST=db
-      - DB_NAME=recipe_app
-      - DB_USER=gramsay
-      - DB_PASS=thiscodeisfuckinraw
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
