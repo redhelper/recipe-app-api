@@ -6,7 +6,7 @@ services:
       # use current folder as context
       context: .
     ports:
-      - "800:8000"
+      - "8000:8000"
     volumes:
       # update these folders once changed:
       - ./recipe_app:/recipe_app
