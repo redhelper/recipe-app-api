@@ -1,6 +1,11 @@
 language: python
 python:
   - "3.6"
+  
+env:
+  global:
+  # random string for testing purposes
+  - secure: SECRET_KEY=this-is-not-my-token-=0brr9c8z-u_2&eh*aeag(81v03w2dw&!8jf-52ed!&dq7c4(7
 
 services:
   - docker
