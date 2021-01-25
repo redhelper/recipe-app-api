@@ -13,7 +13,7 @@ def create_user(**params):
     return get_user_model().objects.create_user(**params)
 
 
-class PublicUserAPITest(TestCase):
+class PublicUserAPITests(TestCase):
     """
     Test the users API (Public)
     """
