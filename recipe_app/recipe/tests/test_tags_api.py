@@ -6,7 +6,7 @@ from rest_framework.test import APIClient
 
 from core.models import Tag
 
-from utils.test_utils import create_user
+from utils.test_utils import sample_user
 from recipe.serializers import TagSerializer
 
 TAGS_URL = reverse('recipe:tag-list')
@@ -35,11 +35,7 @@ class PrivateTagsAPITests(TestCase):
     """
 
     def setUp(self):
-        self.user = create_user(
-            email='test@rafacorp.com',
-            password='superpass123!',
-            name='yea boiiiii',
-        )
+        self.user = sample_user()
         self.client = APIClient()
         self.client.force_authenticate(self.user)
 
@@ -61,7 +57,7 @@ class PrivateTagsAPITests(TestCase):
         """
         Tags returned must be for the current user
         """
-        user2 = create_user(
+        user2 = sample_user(
             email='test2@rafacorp.com',
             password='superpass456!',
             name='aww yeaaaaa',

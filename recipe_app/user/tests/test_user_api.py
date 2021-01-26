@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from utils.test_utils import create_user
+from utils.test_utils import sample_user
 
 CREATE_USER_URL = reverse('user:create')
 TOKEN_URL = reverse('user:token')
@@ -45,7 +45,7 @@ class PublicUserAPITests(TestCase):
             'password': 'superpass123!',
             'name': 'yea boiiiii',
         }
-        create_user(**payload)
+        sample_user(**payload)
 
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -77,7 +77,7 @@ class PublicUserAPITests(TestCase):
             'email': 'test@rafacorp.com',
             'password': 'superpass123!',
         }
-        create_user(**payload)
+        sample_user(**payload)
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertIn('token', res.data)
@@ -87,7 +87,7 @@ class PublicUserAPITests(TestCase):
         """
         Test that token is not created if invalid credentials are given
         """
-        create_user(email='test@rafacorp.com', password='superpass!')
+        sample_user(email='test@rafacorp.com', password='superpass!')
         payload = {
             'email': 'test@rafacorp.com',
             'password': 'superpass123!',
@@ -141,11 +141,7 @@ class PrivateUserAPITests(TestCase):
     """
 
     def setUp(self):
-        self.user = create_user(
-            email='test@rafacorp.com',
-            password='superpass123!',
-            name='yea boiiiii',
-        )
+        self.user = sample_user()
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 

@@ -1,21 +1,15 @@
 from django.test import TestCase, Client
-from django.contrib.auth import get_user_model
 from django.urls import reverse
+
+from utils.test_utils import sample_user, sample_superuser
 
 
 class AdminSiteTests(TestCase):
     def setUp(self):
         self.client = Client()
-        self.admin = get_user_model().objects.create_superuser(
-            email="admin@rafacorp.com",
-            password="superadminpass123!",
-        )
+        self.admin = sample_superuser()
         self.client.force_login(self.admin)
-        self.user = get_user_model().objects.create_user(
-            email="user@rafacorp.com",
-            password="superadminpass123!",
-            name="augustus er",
-        )
+        self.user = sample_user()
 
     def test_users_listed(self):
         """

@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from core.models import Ingredient
-from utils.test_utils import create_user
+from utils.test_utils import sample_user
 from recipe.serializers import IngredientSerializer
 
 INGREDIENTS_URL = reverse('recipe:ingredient-list')
@@ -34,11 +34,7 @@ class PrivateIngredientsAPITests(TestCase):
     """
 
     def setUp(self):
-        self.user = create_user(
-            email='test@rafacorp.com',
-            password='superpass123!',
-            name='yea boiiiii',
-        )
+        self.user = sample_user()
         self.client = APIClient()
         self.client.force_authenticate(self.user)
 
@@ -56,11 +52,11 @@ class PrivateIngredientsAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
-    def test_list_ingredients_for_only_current_user(self):
+    def test_list_ingredients_only_for_current_user(self):
         """
         Ingredients returned must be for the current user
         """
-        user2 = create_user(
+        user2 = sample_user(
             email='test2@rafacorp.com',
             password='superpass456!',
             name='aww yeaaaaa',
