@@ -5,23 +5,22 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from core.models import Recipe
-from utils.test_utils import sample_user
-from recipe.serializers import RecipeSerializer
+from utils.test_utils import (
+    sample_user,
+    sample_recipe,
+    sample_ingredient,
+    sample_tag,
+)
+from recipe.serializers import RecipeSerializer, RecipeDetailSerializer
 
 RECIPES_URL = reverse('recipe:recipe-list')
 
 
-def sample_recipe(user, **params):
+def DETAIL_URL(recipe_id):
     """
-    Create and return a sample recipe
+    Return a recipe detail url
     """
-    defaults = {
-        'title': 'Sample Recipe',
-        'time_minutes': 5,
-        'price': 5.00,
-    }
-    defaults.update(params)
-    return Recipe.objects.create(user=user, **defaults)
+    return reverse('recipe:recipe-detail', args=[recipe_id])
 
 
 class PublicRecipeAPITests(TestCase):
@@ -78,3 +77,34 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['title'], recipe.title)
+
+    def test_view_recipe_detail(self):
+        """
+        Test viewing a recipe detail
+        """
+        recipe = sample_recipe(user=self.user)
+        recipe.tags.add(sample_tag(user=self.user))
+        recipe.ingredients.add(sample_ingredient(user=self.user))
+
+        url = DETAIL_URL(recipe.id)
+        res = self.client.get(url)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        serializer = RecipeDetailSerializer(recipe)
+        self.assertEqual(res.data, serializer.data)
+
+    def test_create_basic_recipe(self):
+        """
+        Test creating a recipe
+        """
+        payload = {
+            'title': 'Chocolate Cheesecake',
+            'time_minutes': 30,
+            'price': 5.00,
+        }
+        res = self.client.post(RECIPES_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        recipe = Recipe.objects.get(id=res.data['id'])
+        for key in payload.keys():
+            self.assertEqual(payload[key], getattr(recipe, key))
