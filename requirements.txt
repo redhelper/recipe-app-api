@@ -3,3 +3,7 @@ djangorestframework>=3.9.0,<3.10.0
 flake8>=3.8.4,<3.9.0
 python-dotenv>=0.15.0,<0.16.0
 psycopg2>=2.7.5,<2.8.0
+
+# test packages
+ipdb
+flake8
